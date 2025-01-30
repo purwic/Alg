@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alg</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+</head>
+<body>
+    <div>
+        word: <input id="word">
+        <button id="button">Generate</button>
+    </div>
+    <div>
+        ps: <input id="result" readonly>
+    </div>
+
+    <script>
+        document.getElementById("button").addEventListener("click", function () {
+            let word = document.getElementById("word").value;
+            let hash = CryptoJS.SHA256(word).toString(); // SHA-256 хэш
+            let res = "";
+            let minAscii = 32;
+            let maxAscii = 126;
+            let range = maxAscii - minAscii; // 126 - 32 = 94
+
+            for (let i = 0; i < hash.length; i += 2) {
+                let hexPair = hash.substring(i, i + 2);
+                let charCode = parseInt(hexPair, 16);
+                charCode = (charCode % range) + minAscii; // Приводим в диапазон 32-125
+                let char = String.fromCharCode(charCode);
+                res += char;
+            }
+
+            document.getElementById("result").value = res;
+        });
+    </script>
+</body>
+</html>
